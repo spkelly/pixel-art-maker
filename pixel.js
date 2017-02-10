@@ -7,18 +7,16 @@ function createGrid(){
   var pixelSize = 20;
   var gridSize = 36;
   var canvas = document.createElement('div');
-  body = document.getElementsByTagName('body')[0];
-  canvas.id = "canvas";
+  var body = document.getElementsByTagName('body')[0];
+  canvas.id = "pixelCanvas";
   canvas.style.width = gridSize*pixelSize + "px";
-  canvas.style.margin = "auto";
-  canvas.style.border = "1px black solid"
+  canvas.style.height = gridSize*pixelSize + "px";
+
   for(var i = 0; i < gridSize * gridSize; i++){
     var box = document.createElement('div');
     box.style.width = pixelSize + "px";
-    box.style.paddingBottom = pixelSize + "px";
-    box.style.float = "left";
-    box.style.border = "1px black solid";
-    box.style.boxSizing = "border-box";
+    box.style.height = pixelSize + "px";
+    box.id = "pixelBox";
     canvas.appendChild(box);
   }
   // canvas.style.width = "600px";
@@ -32,6 +30,17 @@ function createGrid(){
 canvas = createGrid();
 console.log(canvas);
 
+var colorPicker = document.createElement('section');
+var body = document.getElementsByTagName('body')[0];
+colorPicker.id = 'colorPicker';
+
+
+body.appendChild(colorPicker);
+
 canvas.addEventListener('click',function(e){
-  e.target.style.backgroundColor = 'red';
+  if(e.target.id != "pixelCanvas"){
+    e.target.style.backgroundColor = 'red';
+    e.target.style.borderColor = 'red';
+  }
+
 });
