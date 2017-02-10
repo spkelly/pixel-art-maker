@@ -36,24 +36,36 @@ function createColorPicker(colors,container){
   }
 }
 
-var colorArray = ['red','blue','green','yellow','orange','purple','white','pink','brown'];
+currentColor = '';
+
+var colorArray = ['red','blue','green','yellow','orange','purple','white','brown','grey','black'];
 canvas = createGrid();
 console.log(canvas);
 
 var colorPicker = document.createElement('section');
 var body = document.getElementsByTagName('body')[0];
+var click = false;
+var held = false;
 colorPicker.id = 'colorPicker';
 
 
 body.appendChild(colorPicker);
 createColorPicker(colorArray,colorPicker);
 
-canvas.addEventListener('mousedown',function(e){
+canvas.addEventListener('click',function(e){
+  console.log("works");
   if(e.target.id != "pixelCanvas"){
     console.log(e);
 
-    e.target.style.backgroundColor = 'red';
-    e.target.style.borderColor ="red"
+    e.target.style.backgroundColor = currentColor;
+    e.target.style.borderColor = currentColor;
   }
+});
 
+
+colorPicker.addEventListener('click', function(e){
+  if(e.target.className === "color"){
+    currentColor = e.target.style.backgroundColor;
+    console.log(currentColor);
+  }
 });
