@@ -1,4 +1,4 @@
-#colorPicker{
+#colorPallete{
   width: 50%;
   overflow: auto;
   border: 2px solid black;
@@ -50,4 +50,8 @@ body{
   box-sizing: border-box;
   border: 1px solid black;
   float: left;
+}
+
+#colorPicker{
+
 }

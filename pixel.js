@@ -30,6 +30,7 @@ function createGrid(){
   return canvasElement;
 
 }
+
 function createColorPallete(colors,container){
   for (var i = 0; i < colors.length; i++) {
     var color = document.createElement('div');
@@ -40,6 +41,10 @@ function createColorPallete(colors,container){
   var cur = document.createElement('div');
   cur.id = "currentColor";
   container.appendChild(cur);
+  var picker = document.createElement('input');
+  picker.setAttribute('type','color');
+  picker.id = 'colorPicker';
+  container.appendChild(picker);
   return cur;
 }
 
@@ -51,18 +56,18 @@ var colorArray = ['red','blue','green','yellow',
 
 canvas = createGrid();
 
-console.log(canvas);
 
-var colorPicker = document.createElement('section');
+var colorPallete = document.createElement('section');
+
 var body = document.getElementsByTagName('body')[0];
 var mouseHeld = false;
 
-colorPicker.id = 'colorPicker';
+colorPallete.id = 'colorPallete';
 
 
-body.appendChild(colorPicker);
-var currentColorBox = createColorPallete(colorArray,colorPicker);
-
+body.appendChild(colorPallete);
+var currentColorBox = createColorPallete(colorArray,colorPallete);
+var picker = document.getElementsByTagName('input')[0];
 //Adding event listeners to canvas
 canvas.addEventListener('click',function(e){
   if(e.target.id != "pixelCanvas"){
@@ -70,9 +75,10 @@ canvas.addEventListener('click',function(e){
     e.target.style.borderColor = currentColor;
   }
 });
+
 canvas.addEventListener('mousedown',function(){
   mouseHeld = true;
-})
+});
 canvas.addEventListener('mouseup',function(){
   mouseHeld = false;
 })
@@ -83,13 +89,16 @@ canvas.addEventListener('mouseover',function(e){
       e.target.style.borderColor = currentColor;
     }
   }
-})
-
-//adding event listeners to colorPicker
-colorPicker.addEventListener('click', function(e){
+});
+//adding event listeners to colorPallete
+colorPallete.addEventListener('click', function(e){
   if(e.target.className === "color"){
     currentColor = e.target.style.backgroundColor;
     console.log(currentColor);
     currentColorBox.style.backgroundColor = currentColor;
   }
+});
+picker.addEventListener('change',function(){
+  currentColor = picker.value;
+  currentColorBox.style.backgroundColor = currentColor;
 });
