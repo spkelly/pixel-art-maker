@@ -23,7 +23,7 @@ function createGrid(container){
 
   for(var i = 0; i < canvas.gridSize * canvas.gridSize; i++){
     var box = document.createElement('div');
-    box.id = "pixelBox";
+    box.className = "pixelBox";
 
     box.style.width = canvas.pixelSize + "px";
     box.style.height = canvas.pixelSize + "px";
@@ -37,6 +37,7 @@ function createGrid(container){
   return canvas;
 
 }
+
 //generates a pallete of colors
 function createColorPallete(colors,container){
   for (var i = 0; i < colors.length; i++) {
@@ -49,19 +50,7 @@ function createColorPallete(colors,container){
 
   return cur;
 }
-//saves canvas object to local storage
-function saveArt(data){
-  var grid = data.canvasElement.getElementsByTagName('div');
-  var colorArray = []
-  for(element of grid){
-    colorArray.push(element.style.backgroundColor);
-  }
 
-  localStorage.setItem('calorData',JSON.stringify(colorArray));
-  localStorage.setItem('gridSize',JSON.stringify(data.gridSize));
-}
-//loads canvas from local storage
-function loadArt(){}
 
 
 /*
@@ -96,13 +85,11 @@ wrapper.appendChild(title);
 //create pixel grid
 canvas = createGrid(wrapper);
 
-//creates
+//creates current color viewer
 var cur = document.createElement('div');
 cur.id = "currentColor";
 wrapper.appendChild(cur);
 var currentColor = 'black';
-
-
 
 
 //create of custom color picker
@@ -159,8 +146,26 @@ picker.addEventListener('change',function(){
 });
 
 /*
-Save Test
+Save/Load Test
 
 */
+
+
+//saves canvas object to local storage
+function saveArt(data){
+  var grid = data.canvasElement.getElementsByTagName('div');
+  var colorArray = []
+  for(element of grid){
+    colorArray.push(element.style.backgroundColor);
+  }
+
+  localStorage.setItem('calorData',JSON.stringify(colorArray));
+  localStorage.setItem('gridSize',JSON.stringify(data.gridSize));
+}
+
+//loads canvas from local storage
+function loadArt(){}
+
+
 canvas.colorData = ['255','255'];
 saveArt(canvas)
