@@ -1,6 +1,8 @@
 function createGrid(){
-  var pixelSize = 20;
-  var gridSize = 30;
+  var canvas = {};
+  canvas.pixelSize = 20;
+  canvas.gridSize = 36;
+
   var body = document.getElementsByTagName('body')[0];
 
   var title = document.createElement('h1');
@@ -8,64 +10,86 @@ function createGrid(){
   title.innerText = "Pixel Art Thing";
   body.appendChild(title);
 
-  var canvas = document.createElement('div');
-  canvas.id = "pixelCanvas";
+  var canvasElement = document.createElement('div');
+  canvasElement.id = "pixelCanvas";
 
-  canvas.style.width = gridSize*pixelSize + "px";
-  canvas.style.height = gridSize*pixelSize + "px";
+  canvasElement.style.width = (canvas.gridSize*canvas.pixelSize) + "px";
+  canvasElement.style.height = (canvas.gridSize*canvas.pixelSize) + "px";
 
-  for(var i = 0; i < gridSize * gridSize; i++){
+  for(var i = 0; i < canvas.gridSize * canvas.gridSize; i++){
     var box = document.createElement('div');
     box.id = "pixelBox";
 
-    box.style.width = pixelSize + "px";
-    box.style.height = pixelSize + "px";
+    box.style.width = canvas.pixelSize + "px";
+    box.style.height = canvas.pixelSize + "px";
 
-    canvas.appendChild(box);
+    canvasElement.appendChild(box);
   }
-  body.appendChild(canvas);
-  return canvas;
+  body.appendChild(canvasElement);
+  console.log(canvas);
+  return canvasElement;
 
 }
-function createColorPicker(colors,container){
+function createColorPallete(colors,container){
   for (var i = 0; i < colors.length; i++) {
     var color = document.createElement('div');
     color.className = 'color';
     container.appendChild(color);
     color.style.backgroundColor = colors[i];
   }
+  var cur = document.createElement('div');
+  cur.id = "currentColor";
+  container.appendChild(cur);
+  return cur;
 }
 
-currentColor = '';
+var currentColor = 'black';
+var colorArray = ['red','blue','green','yellow',
+                  'orange','purple','white','brown',
+                  'grey','black'];
 
-var colorArray = ['red','blue','green','yellow','orange','purple','white','brown','grey','black'];
+
 canvas = createGrid();
+
 console.log(canvas);
 
 var colorPicker = document.createElement('section');
 var body = document.getElementsByTagName('body')[0];
-var click = false;
-var held = false;
+var mouseHeld = false;
+
 colorPicker.id = 'colorPicker';
 
 
 body.appendChild(colorPicker);
-createColorPicker(colorArray,colorPicker);
+var currentColorBox = createColorPallete(colorArray,colorPicker);
 
+//Adding event listeners to canvas
 canvas.addEventListener('click',function(e){
-  console.log("works");
   if(e.target.id != "pixelCanvas"){
-    console.log(e);
-
     e.target.style.backgroundColor = currentColor;
     e.target.style.borderColor = currentColor;
   }
 });
+canvas.addEventListener('mousedown',function(){
+  mouseHeld = true;
+})
+canvas.addEventListener('mouseup',function(){
+  mouseHeld = false;
+})
+canvas.addEventListener('mouseover',function(e){
+  if(mouseHeld){
+    if(e.target.id !== "pixelCanvas"){
+      e.target.style.backgroundColor = currentColor;
+      e.target.style.borderColor = currentColor;
+    }
+  }
+})
 
-
+//adding event listeners to colorPicker
 colorPicker.addEventListener('click', function(e){
   if(e.target.className === "color"){
     currentColor = e.target.style.backgroundColor;
     console.log(currentColor);
+    currentColorBox.style.backgroundColor = currentColor;
   }
 });
