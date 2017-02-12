@@ -1,20 +1,24 @@
-function createGrid(){
+function createGrid(container){
   var canvas = {};
   canvas.pixelSize = 20;
   canvas.gridSize = 36;
+  canvas.colorData = [];
+  var colorRow = [];
 
-  var body = document.getElementsByTagName('body')[0];
-
+  var canvasWidth = canvas.gridSize*canvas.pixelSize + "px";
+  var canvasHeight = canvas.gridSize*canvas.pixelSize + "px";
+  var gridSize = canvasHeight * canvasWidth;
+  var canvasElement = document.createElement('div');
   var title = document.createElement('h1');
+
   title.id = "title";
   title.innerText = "Pixel Art Thing";
-  body.appendChild(title);
+  container.appendChild(title);
 
-  var canvasElement = document.createElement('div');
+
   canvasElement.id = "pixelCanvas";
-
-  canvasElement.style.width = (canvas.gridSize*canvas.pixelSize) + "px";
-  canvasElement.style.height = (canvas.gridSize*canvas.pixelSize) + "px";
+  canvasElement.style.width = canvasWidth;
+  canvasElement.style.height = canvasHeight;
 
   for(var i = 0; i < canvas.gridSize * canvas.gridSize; i++){
     var box = document.createElement('div');
@@ -25,12 +29,13 @@ function createGrid(){
 
     canvasElement.appendChild(box);
   }
-  body.appendChild(canvasElement);
+
+  container.appendChild(canvasElement);
   console.log(canvas);
-  return canvasElement;
+  canvas.canvasElement = canvasElement;
+  return canvas;
 
 }
-
 function createColorPallete(colors,container){
   for (var i = 0; i < colors.length; i++) {
     var color = document.createElement('div');
@@ -38,51 +43,80 @@ function createColorPallete(colors,container){
     container.appendChild(color);
     color.style.backgroundColor = colors[i];
   }
-  var cur = document.createElement('div');
-  cur.id = "currentColor";
-  container.appendChild(cur);
-  var picker = document.createElement('input');
-  picker.setAttribute('type','color');
-  picker.id = 'colorPicker';
-  container.appendChild(picker);
+
+
   return cur;
 }
+function saveArt(data){
+  var grid = data.canvasElement.getElementsByTagName('div');
+  var colorArray = []
+  for(element of grid){
+    colorArray.push(element.style.backgroundColor);
+  }
 
-var currentColor = 'black';
-var colorArray = ['red','blue','green','yellow',
+  localStorage.setItem('calorData',JSON.stringify(colorArray));
+  localStorage.setItem('gridSize',JSON.stringify(data.gridSize));
+}
+function loadArt(){}
+
+//creates array of colors
+var colorArray = [ 'rgb\(255,255,255\)','blue','green','yellow',
                   'orange','purple','white','brown',
                   'grey','black'];
-
-
-canvas = createGrid();
-
-
-var colorPallete = document.createElement('section');
-
-var body = document.getElementsByTagName('body')[0];
 var mouseHeld = false;
+var body = document.getElementsByTagName('body')[0];
 
+for(var i=0;i < 3; i++){
+  for (var j = 0; i < 255; i++) {
+
+  }
+}
+
+//created site wrapper
+var wrapper = document.createElement('section');
+wrapper.id = "wrapper";
+body.appendChild(wrapper);
+
+
+//create pixel grid
+canvas = createGrid(wrapper);
+var cur = document.createElement('div');
+cur.id = "currentColor";
+wrapper.appendChild(cur);
+var currentColor = 'black';
+
+
+//save test
+canvas.colorData = ['255','255'];
+saveArt(canvas)
+
+//creation of custom color picker
+var picker = document.createElement('input');
+picker.setAttribute('type','color');
+picker.setAttribute('value','#ff0000');
+picker.id = 'colorPicker';
+wrapper.appendChild(picker);
+
+
+//create color pallete
+var colorPallete = document.createElement('section');
 colorPallete.id = 'colorPallete';
-
-
-body.appendChild(colorPallete);
+wrapper.appendChild(colorPallete);
 var currentColorBox = createColorPallete(colorArray,colorPallete);
-var picker = document.getElementsByTagName('input')[0];
+
+
 //Adding event listeners to canvas
-canvas.addEventListener('click',function(e){
+canvas.canvasElement.addEventListener('click',function(e){
   if(e.target.id != "pixelCanvas"){
     e.target.style.backgroundColor = currentColor;
     e.target.style.borderColor = currentColor;
   }
 });
-
-canvas.addEventListener('mousedown',function(){
+canvas.canvasElement.addEventListener('mousedown',function(){
   mouseHeld = true;
 });
-canvas.addEventListener('mouseup',function(){
-  mouseHeld = false;
-})
-canvas.addEventListener('mouseover',function(e){
+canvas.canvasElement.addEventListener('mouseover',function(e){
+  //changeColor(e)
   if(mouseHeld){
     if(e.target.id !== "pixelCanvas"){
       e.target.style.backgroundColor = currentColor;
@@ -90,6 +124,9 @@ canvas.addEventListener('mouseover',function(e){
     }
   }
 });
+body.addEventListener('mouseup',function(){
+  mouseHeld = false;
+})
 //adding event listeners to colorPallete
 colorPallete.addEventListener('click', function(e){
   if(e.target.className === "color"){
