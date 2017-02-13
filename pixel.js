@@ -1,4 +1,3 @@
-
 /*
 Functions
 */
@@ -11,16 +10,17 @@ function createGrid(container){
   canvas.colorData = [];
   var colorRow = [];
 
+  //set canvas dimensions
   var canvasWidth = canvas.gridSize*canvas.pixelSize + "px";
   var canvasHeight = canvas.gridSize*canvas.pixelSize + "px";
-  var gridSize = canvasHeight * canvasWidth;
+
+  //create canvas element
   var canvasElement = document.createElement('div');
-
-
   canvasElement.id = "pixelCanvas";
   canvasElement.style.width = canvasWidth;
   canvasElement.style.height = canvasHeight;
 
+  //populate canvas
   for(var i = 0; i < canvas.gridSize * canvas.gridSize; i++){
     var box = document.createElement('div');
     box.className = "pixelBox";
@@ -52,15 +52,15 @@ function createColorPallete(colors,container){
 }
 
 
-
 /*
 HTML Creation
 */
 
 //create array of colors used in pallete
-var colorArray = [ 'rgb\(255,255,255\)','blue','green','yellow',
-                  'orange','purple','white','brown',
+var colorArray = [ 'red','darkred','salmon','blue','teal','lightblue','darkblue','green','lightgreen','darkgreen','yellow',
+                  'orange','purple','fuchsia','white','brown',
                   'grey','black'];
+
 var mouseHeld = false;
 var body = document.getElementsByTagName('body')[0];
 //
@@ -79,9 +79,10 @@ body.appendChild(wrapper);
 //creates title;
 var title = document.createElement('h1');
 title.id = "title";
-title.innerText = "Pixel Art Thing";
+title.innerText = "Pixel Art Creator";
 wrapper.appendChild(title);
 
+//create
 //create pixel grid
 canvas = createGrid(wrapper);
 
@@ -144,28 +145,3 @@ picker.addEventListener('change',function(){
   currentColor = picker.value;
   currentColorBox.style.backgroundColor = currentColor;
 });
-
-/*
-Save/Load Test
-
-*/
-
-
-//saves canvas object to local storage
-function saveArt(data){
-  var grid = data.canvasElement.getElementsByTagName('div');
-  var colorArray = []
-  for(element of grid){
-    colorArray.push(element.style.backgroundColor);
-  }
-
-  localStorage.setItem('calorData',JSON.stringify(colorArray));
-  localStorage.setItem('gridSize',JSON.stringify(data.gridSize));
-}
-
-//loads canvas from local storage
-function loadArt(){}
-
-
-canvas.colorData = ['255','255'];
-saveArt(canvas)
